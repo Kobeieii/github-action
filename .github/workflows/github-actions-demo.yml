@@ -23,7 +23,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
-        run: npm install
+        run: npm install 
 
       - name: Run linting
         run: npm run lint
@@ -31,6 +31,7 @@ jobs:
   Build:
     needs: Code-Check
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
 
     steps:
       - name: Test needs syntax
