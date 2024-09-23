@@ -26,4 +26,12 @@ jobs:
         run: npm install
 
       - name: Run linting
-        run: npm run lint 
+        run: npm run lint
+
+  Build:
+    needs: Code-Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Test needs syntax
+        run: echo "This job runs after the Code-Check job"
