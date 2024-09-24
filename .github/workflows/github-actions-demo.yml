@@ -23,10 +23,17 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
-        run: npm install 
+        run: npm install
 
       - name: Run linting
         run: npm run lint
+
+      - name: Run CodeRabbit Review
+        run: |
+          curl -X POST -H "Authorization: Bearer ${{ secrets.CODERABBIT_API_TOKEN }}" \
+               -H "Content-Type: application/json" \
+               -d '{"event_type": "review"}' \
+               https://api.coderabbit.ai/v1/reviews
 
   Build:
     needs: Code-Check
