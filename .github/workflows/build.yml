@@ -63,10 +63,8 @@ jobs:
           gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
 
       - name: Set env SERVICE
-        run: |
-          if [[ $BRANCH == 'main' ]]; then
-              echo "SERVICE=${{ github.event.repository.name }}" >> "$GITHUB_ENV"
-          fi
+        if: github.ref == 'refs/heads/main'
+        run: echo "SERVICE=${{ github.event.repository.name }}" >> "$GITHUB_ENV"
 
       - name: Build and Push Container
         run: |-
