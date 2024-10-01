@@ -2,12 +2,13 @@
   <HelloWorld />
   <div class="mt-5 text-xs hover:text-base">
     <p>From {{ env }} server</p>
+    {{ hostname }}
   </div>
 </template>
 
 <script setup lang="ts">
 const hostname = new URL(import.meta.url).hostname
-const env = ref<string>(hostname === "https://github-action-demo-657305254360.asia-southeast1.run.app/" ? "Production" : "Development")
+const env = ref<string>(hostname === "github-action-demo-657305254360.asia-southeast1" ? "Production" : "Development")
 </script>
 
 <style scoped>
