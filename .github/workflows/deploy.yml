@@ -6,8 +6,7 @@ on:
     types:
       - completed
     branches:
-      - "'main'"
-      - "'develop'"
+      - "**"
 
 env:
   PROJECT_ID: swift-impulse-364410
