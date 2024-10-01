@@ -56,7 +56,7 @@ jobs:
         with:
           workload_identity_provider: "${{ env.WORKLOAD_IDENTITY_PROVIDER }}"
           service_account: "${{ env.SERVICE_ACCOUNT }}"
-      
+
       - name: Debug token
         run: echo "${{ steps.auth.outputs.auth_token }}"
 
