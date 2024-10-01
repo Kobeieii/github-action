@@ -6,10 +6,10 @@ on:
       - "**"
 
 env:
-  PROJECT_ID: 'swift-impulse-364410'
-  REGION: 'asia-southeast1'
-  SERVICE: 'github-action-demo'
-  WORKLOAD_IDENTITY_PROVIDER: 'projects/657305254360/locations/global/workloadIdentityPools/github-pool/providers/github'
+  PROJECT_ID: swift-impulse-364410
+  REGION: asia-southeast1
+  SERVICE: github-action-demo
+  WORKLOAD_IDENTITY_PROVIDER: projects/657305254360/locations/global/workloadIdentityPools/github-pool/providers/github
 
 jobs:
   Code-Check:
@@ -42,20 +42,20 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
     permissions:
-      contents: 'read'
-      id-token: 'write'
+      contents: read
+      id-token: write
 
     steps:
-      - name: 'Checkout'
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
+      - id: auth
+        name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: '${{ env.WORKLOAD_IDENTITY_PROVIDER }}'
+          workload_identity_provider: "${{ env.WORKLOAD_IDENTITY_PROVIDER }}"
 
-      - name: 'Build and Push Container'
+      - name: Build and Push Container
         run: |-
           DOCKER_TAG="$${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}"
           docker build --tag "${DOCKER_TAG}" .
