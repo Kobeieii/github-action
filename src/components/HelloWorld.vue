@@ -1,6 +1,6 @@
 <template>
   <h1 class="text-3xl font-bold underline">
-    Hello world!
+    Hello world! 🎉
   </h1>
   <br>
   <button class="outline outline-blue-500 hover:outline-blue-700 hover:shadow-lg font-bold py-2 px-4 rounded" @click="() => count++">
