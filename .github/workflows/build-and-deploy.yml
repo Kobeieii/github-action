@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Build and Deploy to Cloud Run
 
 on:
   push:
@@ -6,11 +6,11 @@ on:
       - "**"
 
 env:
-  PROJECT_ID: swift-impulse-364410
+  PROJECT_ID: ${{ secrets.PROJECT_ID }}
   REGION: asia-southeast1
   SERVICE: ${{ github.event.repository.name }}-dev
-  WORKLOAD_IDENTITY_PROVIDER: projects/657305254360/locations/global/workloadIdentityPools/github-pool/providers/github
-  SERVICE_ACCOUNT: github-provider@swift-impulse-364410.iam.gserviceaccount.com
+  WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+  SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
 
 jobs:
   Code-Check:
