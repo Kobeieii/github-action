@@ -1,0 +1,75 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - "**"
+
+env:
+  PROJECT_ID: swift-impulse-364410
+  REGION: asia-southeast1
+  SERVICE: ${{ github.event.repository.name }}-dev
+  WORKLOAD_IDENTITY_PROVIDER: projects/657305254360/locations/global/workloadIdentityPools/github-pool/providers/github
+  SERVICE_ACCOUNT: github-provider@swift-impulse-364410.iam.gserviceaccount.com
+
+jobs:
+  Code-Check:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Project
+        run: npm run build
+
+      - name: Run linting
+        run: npm run lint
+
+  Build:
+    needs: Code-Check
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: "${{ env.WORKLOAD_IDENTITY_PROVIDER }}"
+          service_account: "${{ env.SERVICE_ACCOUNT }}"
+
+      - name: Configure Docker Client
+        run: |-
+          gcloud auth configure-docker --quiet
+          gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
+
+      - name: Set env SERVICE
+        run: |
+          if [[ $BRANCH == 'main' ]]; then
+              echo "SERVICE=${{ github.event.repository.name }}" >> "$GITHUB_ENV"
+          fi
+
+      - name: Build and Push Container
+        run: |-
+          DOCKER_TAG="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/cloud-run-source-deploy/${{ env.SERVICE }}:${{ github.sha }}"
+          docker build --tag "${DOCKER_TAG}" .
+          docker push "${DOCKER_TAG}"
