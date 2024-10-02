@@ -1,4 +1,3 @@
-
 # Automate Deployment using GitHub Actions and Google Cloud Run
 
 This repository demonstrates how to automate the deployment of a web application built with **Vite**, **Vue 3**, and **TypeScript** using **GitHub Actions** and **Google Cloud Run**. It includes setup for managing separate **prod** and **dev** environments using **Google Cloud Run**, **Artifact Registry**, and **Workload Identity Federation** for keyless authentication.
@@ -18,13 +17,14 @@ This repository demonstrates how to automate the deployment of a web application
 
 The GitHub Actions workflow consists of two jobs:
 
-1. **Code-Check**: 
-    - Runs linting and ensures that the project builds successfully with the specified Node.js version.
-  
+1. **Code-Check**:
+
+   - Runs linting and ensures that the project builds successfully with the specified Node.js version.
+
 2. **Build-and-Deploy**:
-    - Builds the Docker container for the web app.
-    - Pushes the container to **Google Artifact Registry**.
-    - Deploys the container to **Google Cloud Run**, choosing between the `dev` or `prod` environment based on the branch (`main` for production, `develop` for development).
+   - Builds the Docker container for the web app.
+   - Pushes the container to **Google Artifact Registry**.
+   - Deploys the container to **Google Cloud Run**, choosing between the `dev` or `prod` environment based on the branch (`main` for production, `develop` for development).
 
 ### Workload Identity Federation
 
